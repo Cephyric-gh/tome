@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+@source "../index.html";
+@source "../src/**/*.{js,ts,jsx,tsx}";
+
+/* Smooth dark mode transition */
+html {
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+}
