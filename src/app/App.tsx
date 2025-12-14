@@ -202,7 +202,7 @@ function App() {
                     <p>
                         &copy; {new Date().getFullYear()}&nbsp;
                         <a
-                            href="https://github.com/Cephyric-gh/tome"
+                            href="https://github.com/Cephyric-gh"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="underline hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
