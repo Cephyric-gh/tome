@@ -9,7 +9,7 @@ export const calculateTrueMaxScore = (tome: RawTomeItem): number | string => {
             const numerator = Math.pow((Math.pow(1.7, 0.7) * tome.max_points) / (target - 1), 10 / 7);
             return Math.ceil((numerator * tome.max_score) / (numerator - 1));
         case 1:
-            return "Nah lol";
+            return "∞";
         case 2:
             return tome.max_score;
         case 3:

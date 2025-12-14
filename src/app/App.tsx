@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { POINTS, IDLEONNUM } from "./functions/sheet-fns";
 import ImportDialog from "./components/ImportDialog";
+import BulkImportDialog from "./components/BulkImportDialog";
 import ExportDialog from "./components/ExportDialog";
-import { accounts, bestAccount } from "./functions/accounts";
+import ManageAccountsDialog from "./components/ManageAccountsDialog";
+import { getAllAccounts, bestAccount } from "./functions/accounts";
 import ToolboxTable from "./components/ToolboxTable";
 import TotalPointsBox from "./components/TotalPointsBox";
 import FiltersBar from "./components/FiltersBar";
@@ -28,12 +30,15 @@ function App() {
     const [storedScores, setStoredScores] = useStickyState<number[]>([], "toolboxScores");
     const [toolboxScores, setToolboxScores] = useState<ToolboxRow["score"][]>([]);
     const [isImportDialogOpen, setIsImportDialogOpen] = useState(false);
+    const [isBulkImportDialogOpen, setIsBulkImportDialogOpen] = useState(false);
     const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
+    const [isManageAccountsDialogOpen, setIsManageAccountsDialogOpen] = useState(false);
     const [importScoreCount, setImportScoreCount] = useState(0);
     const [comparisonAccountIndex, setComparisonAccountIndex] = useState<number>(-1);
     const [showPoints, setShowPoints] = useStickyState(true, "showPoints");
     const [showMax, setShowMax] = useStickyState(false, "showMax");
     const [highlightRow, setHighlightRow] = useStickyState(false, "highlightRow");
+    const [accountsUpdateTrigger, setAccountsUpdateTrigger] = useState(0);
 
     useEffect(() => setToolboxScores(formatToolboxScores(storedScores)), [storedScores]);
     useEffect(() => setImportScoreCount(toolboxScores.length), [toolboxScores]);
@@ -41,6 +46,17 @@ function App() {
     const handleImport = (parsedScores: number[]) => {
         setStoredScores(Array.from({ length: tomeLength }, (_, i) => i).map((index) => parsedScores[index] ?? null));
         setImportScoreCount(parsedScores.length);
+    };
+
+    const handleAccountsUpdated = () => {
+        // Check if the current comparison account still exists
+        const allAccounts = getAllAccounts();
+        if (comparisonAccountIndex >= allAccounts.length) {
+            // Reset to "Best" if the selected account was deleted
+            setComparisonAccountIndex(-1);
+        }
+        // Trigger re-render to update comparison dropdown
+        setAccountsUpdateTrigger((prev) => prev + 1);
     };
 
     // Evaluate toolbox data from scores
@@ -58,9 +74,14 @@ function App() {
     const totalPoints = evaluatedToolbox.reduce((sum, row) => sum + row.points, 0);
 
     // Calculate comparison total points
-    const comparisonTotalPoints = (
-        comparisonAccountIndex === -1 ? bestAccount : accounts[comparisonAccountIndex]
-    ).scores.reduce((sum, score, index) => sum + POINTS(index, IDLEONNUM(score)), 0);
+    const comparisonAccount =
+        comparisonAccountIndex === -1 || comparisonAccountIndex >= getAllAccounts().length
+            ? bestAccount
+            : getAllAccounts()[comparisonAccountIndex];
+    const comparisonTotalPoints = comparisonAccount.scores.reduce(
+        (sum, score, index) => sum + POINTS(index, IDLEONNUM(score)),
+        0,
+    );
 
     return (
         <div className="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
@@ -76,15 +97,28 @@ function App() {
                                 Import Scores
                             </button>
                             <button
+                                onClick={() => setIsBulkImportDialogOpen(true)}
+                                className="px-4 py-2 bg-purple-600 dark:bg-purple-700 text-white rounded-lg hover:bg-purple-700 dark:hover:bg-purple-600 transition-colors"
+                            >
+                                Bulk Import
+                            </button>
+                            <button
                                 onClick={() => setIsExportDialogOpen(true)}
                                 className="px-4 py-2 bg-green-600 dark:bg-green-700 text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-600 transition-colors"
                             >
                                 Export Scores
                             </button>
+                            <button
+                                onClick={() => setIsManageAccountsDialogOpen(true)}
+                                className="px-4 py-2 bg-orange-600 dark:bg-orange-700 text-white rounded-lg hover:bg-orange-700 dark:hover:bg-orange-600 transition-colors"
+                            >
+                                Manage Accounts
+                            </button>
                         </div>
                     </div>
 
                     <FiltersBar
+                        key={accountsUpdateTrigger}
                         comparisonAccountIndex={comparisonAccountIndex}
                         setComparisonAccountIndex={(x) => setComparisonAccountIndex(x)}
                         showPoints={showPoints}
@@ -127,10 +161,29 @@ function App() {
             </div>
 
             {isImportDialogOpen && (
-                <ImportDialog onClose={() => setIsImportDialogOpen(false)} onImport={handleImport} />
+                <ImportDialog
+                    onClose={() => setIsImportDialogOpen(false)}
+                    onImport={handleImport}
+                    onAccountsUpdated={handleAccountsUpdated}
+                />
+            )}
+
+            {isBulkImportDialogOpen && (
+                <BulkImportDialog
+                    onClose={() => setIsBulkImportDialogOpen(false)}
+                    onImport={handleImport}
+                    onAccountsUpdated={handleAccountsUpdated}
+                />
             )}
 
             {isExportDialogOpen && <ExportDialog onClose={() => setIsExportDialogOpen(false)} scores={toolboxScores} />}
+
+            {isManageAccountsDialogOpen && (
+                <ManageAccountsDialog
+                    onClose={() => setIsManageAccountsDialogOpen(false)}
+                    onAccountsUpdated={handleAccountsUpdated}
+                />
+            )}
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import { accounts, bestAccount } from "../functions/accounts";
+import { getAllAccounts, bestAccount } from "../functions/accounts";
 import { formatNumber } from "../functions/format-number";
 
 interface TotalPointsBoxProps {
@@ -14,6 +14,11 @@ export default function TotalPointsBox({
     comparisonAccountIndex,
 }: TotalPointsBoxProps) {
     const diffPoints = totalPoints - comparisonTotalPoints;
+    const allAccounts = getAllAccounts();
+    const compAccount =
+        comparisonAccountIndex === -1 || comparisonAccountIndex >= allAccounts.length
+            ? bestAccount
+            : allAccounts[comparisonAccountIndex];
 
     return (
         <div className="mb-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg px-6 py-4 border-2 border-blue-200 dark:border-blue-800">
@@ -27,9 +32,7 @@ export default function TotalPointsBox({
                         </div>
                     </div>
                     <div className="text-right">
-                        <div className="text-xs text-gray-500 dark:text-gray-400 uppercase">
-                            {comparisonAccountIndex === -1 ? bestAccount.name : accounts[comparisonAccountIndex].name}
-                        </div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400 uppercase">{compAccount.name}</div>
                         <div className="text-xl font-bold text-purple-600 dark:text-purple-400 font-mono">
                             {formatNumber(comparisonTotalPoints)}
                         </div>

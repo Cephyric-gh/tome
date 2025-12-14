@@ -3,6 +3,12 @@
 @source "../index.html";
 @source "../src/**/*.{js,ts,jsx,tsx}";
 
+@utility scrollbar-hidden {
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
 /* Smooth dark mode transition */
 html {
     transition:

@@ -1,4 +1,4 @@
-import { accounts } from "../functions/accounts";
+import { getAllAccounts } from "../functions/accounts";
 
 interface FiltersBarProps {
     comparisonAccountIndex: number;
@@ -34,7 +34,7 @@ export default function FiltersBar({
                     className="px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                 >
                     <option value="-1">Best</option>
-                    {accounts.map((account, index) => (
+                    {getAllAccounts().map((account, index) => (
                         <option key={index} value={index}>
                             {account.name}
                         </option>

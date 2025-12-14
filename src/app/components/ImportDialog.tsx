@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { clsx } from "clsx";
 import { IDLEONNUM } from "../functions/sheet-fns";
+import { saveCustomAccount } from "../functions/custom-accounts";
 
 interface ImportDialogProps {
     onClose: () => void;
     onImport: (scores: number[]) => void;
+    onAccountsUpdated?: () => void;
 }
 
 function parseImportText(text: string): number[] {
@@ -29,10 +31,12 @@ function parseImportText(text: string): number[] {
     return parsedNumbers;
 }
 
-export default function ImportDialog({ onClose, onImport }: ImportDialogProps) {
+export default function ImportDialog({ onClose, onImport, onAccountsUpdated }: ImportDialogProps) {
     const [importText, setImportText] = useState("");
     const [closing, setClosing] = useState(false);
     const [error, setError] = useState("");
+    const [saveAsComparison, setSaveAsComparison] = useState(false);
+    const [accountName, setAccountName] = useState("");
 
     const handleImport = () => {
         setError("");
@@ -43,8 +47,18 @@ export default function ImportDialog({ onClose, onImport }: ImportDialogProps) {
             return;
         }
 
-        onImport(parsedScores);
-        onClose();
+        if (saveAsComparison) {
+            if (!accountName.trim()) {
+                setError("Please enter a name for the comparison account");
+                return;
+            }
+            saveCustomAccount(accountName.trim(), parsedScores);
+            onAccountsUpdated?.();
+            onClose();
+        } else {
+            onImport(parsedScores);
+            onClose();
+        }
     };
 
     const handleCancel = () => {
@@ -96,8 +110,30 @@ export default function ImportDialog({ onClose, onImport }: ImportDialogProps) {
                         value={importText}
                         onChange={(e) => setImportText(e.target.value)}
                         placeholder="Account LV&#10;&#10;42069&#10;&#10;6,769 PTS&#10;&#10;..."
-                        className="w-full h-40 p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                        className="w-full h-40 p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 mb-4"
                     />
+
+                    <div className="space-y-3">
+                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={saveAsComparison}
+                                onChange={(e) => setSaveAsComparison(e.target.checked)}
+                                className="w-4 h-4 text-blue-600 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 dark:focus:ring-blue-400"
+                            />
+                            <span>Save as comparison account instead</span>
+                        </label>
+
+                        {saveAsComparison && (
+                            <input
+                                type="text"
+                                value={accountName}
+                                onChange={(e) => setAccountName(e.target.value)}
+                                placeholder="Enter account name"
+                                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                            />
+                        )}
+                    </div>
                 </div>
                 <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3">
                     <button
@@ -110,7 +146,7 @@ export default function ImportDialog({ onClose, onImport }: ImportDialogProps) {
                         onClick={handleImport}
                         className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                     >
-                        Import
+                        {saveAsComparison ? "Save Comparison" : "Import"}
                     </button>
                 </div>
             </div>

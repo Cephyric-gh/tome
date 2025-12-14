@@ -16,17 +16,19 @@ export function IDLEONNUM(input: string | number | null): number | null {
         return input;
     }
 
-    return parseFloat(
-        input
-            .replace(/,/g, "")
-            .replace(/k/g, "e3")
-            .replace(/m/g, "e6")
-            .replace(/b/g, "e9")
-            .replace(/t/g, "e12")
-            .replace(/qqq/g, "e21")
-            .replace(/qq/g, "e18")
-            .replace(/q/g, "e15"),
-    );
+    return parseFloat(expandShorthand(input));
+}
+
+export function expandShorthand(input: string): string {
+    return input
+        .replace(/,/g, "")
+        .replace(/k/g, "e3")
+        .replace(/m/g, "e6")
+        .replace(/b/g, "e9")
+        .replace(/t/g, "e12")
+        .replace(/qqq/g, "e21")
+        .replace(/qq/g, "e18")
+        .replace(/q/g, "e15");
 }
 
 /**
