@@ -5,6 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 // https://vitejs.dev/config/
 export default {
     root: "src/app",
+    base: "/tome/",
     plugins: [react(), tailwindcss()],
     build: { outDir: "../../dist", emptyOutDir: true },
 } satisfies UserConfig;

@@ -89,12 +89,6 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                             >
                                 Reload Application
                             </button>
-                            <button
-                                onClick={() => (window.location.href = "/")}
-                                className="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium"
-                            >
-                                Go to Home
-                            </button>
                         </div>
 
                         <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
