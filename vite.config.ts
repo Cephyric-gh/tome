@@ -9,4 +9,7 @@ export default {
     publicDir: "/public/",
     plugins: [react(), tailwindcss()],
     build: { outDir: "../../dist", emptyOutDir: true },
+    define: {
+        "import.meta.env.VITE_LAST_LEADERBOARD_UPDATE": '"2025-12-14 02:00"',
+    },
 } satisfies UserConfig;
