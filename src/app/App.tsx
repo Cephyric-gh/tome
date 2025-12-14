@@ -96,12 +96,14 @@ function App() {
                             >
                                 Import Scores
                             </button>
-                            <button
-                                onClick={() => setIsBulkImportDialogOpen(true)}
-                                className="px-4 py-2 bg-purple-600 dark:bg-purple-700 text-white rounded-lg hover:bg-purple-700 dark:hover:bg-purple-600 transition-colors"
-                            >
-                                Bulk Import
-                            </button>
+                            {import.meta.env.DEV && (
+                                <button
+                                    onClick={() => setIsBulkImportDialogOpen(true)}
+                                    className="px-4 py-2 bg-purple-600 dark:bg-purple-700 text-white rounded-lg hover:bg-purple-700 dark:hover:bg-purple-600 transition-colors"
+                                >
+                                    Bulk Import
+                                </button>
+                            )}
                             <button
                                 onClick={() => setIsExportDialogOpen(true)}
                                 className="px-4 py-2 bg-green-600 dark:bg-green-700 text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-600 transition-colors"
@@ -168,7 +170,7 @@ function App() {
                 />
             )}
 
-            {isBulkImportDialogOpen && (
+            {import.meta.env.DEV && isBulkImportDialogOpen && (
                 <BulkImportDialog
                     onClose={() => setIsBulkImportDialogOpen(false)}
                     onImport={handleImport}
