@@ -8,22 +8,20 @@
         "deploy": "npm run pregen && npm run build"
     },
     "dependencies": {
-        "clsx": "^2.1.1",
-        "prettier": "^3.7.4",
-        "react": "^19.2.1",
-        "react-dom": "^19.2.1",
-        "tsx": "^4.20.3"
+        "clsx": "2.1.1",
+        "prettier": "3.7.4",
+        "react": "19.2.3",
+        "react-dom": "19.2.3",
+        "tsx": "4.21.0"
     },
     "devDependencies": {
-        "@tailwindcss/vite": "^4.1.17",
-        "@types/node": "^24.10.1",
-        "@types/react": "^19.2.7",
-        "@types/react-dom": "^19.2.3",
-        "@vitejs/plugin-react": "^4.2.1",
-        "autoprefixer": "^10.4.16",
-        "postcss": "^8.4.32",
-        "tailwindcss": "^4.0.0",
-        "typescript": "^5.9.3",
-        "vite": "^7.2.6"
+        "@tailwindcss/vite": "4.1.18",
+        "@types/node": "24.10.1",
+        "@types/react": "19.2.7",
+        "@types/react-dom": "19.2.3",
+        "@vitejs/plugin-react": "5.1.2",
+        "tailwindcss": "4.1.18",
+        "typescript": "5.9.3",
+        "vite": "7.2.7"
     }
 }
