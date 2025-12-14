@@ -186,6 +186,32 @@ function App() {
                     onAccountsUpdated={handleAccountsUpdated}
                 />
             )}
+
+            <footer className="mt-12 pt-8 pb-6 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex flex-col items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                    <div>
+                        <a
+                            href="https://github.com/Cephyric-gh/tome"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="underline hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                        >
+                            View on GitHub
+                        </a>
+                    </div>
+                    <p>
+                        &copy; {new Date().getFullYear()}&nbsp;
+                        <a
+                            href="https://github.com/Cephyric-gh/tome"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="underline hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                        >
+                            @cephyric-gh
+                        </a>
+                    </p>
+                </div>
+            </footer>
         </div>
     );
 }
