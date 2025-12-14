@@ -25,6 +25,7 @@ This app displays IdleOn game Tome Toolbox achievement data with scoring calcula
 **Runtime Data:**
 - User scores stored in localStorage via `useStickyState` hook
 - Comparison accounts hardcoded in `src/app/functions/accounts.ts`
+- Custom accounts stored in localStorage via `src/app/functions/custom-accounts.ts`
 - "Best" account dynamically calculated as max score across all accounts for each achievement
 
 ### Core Calculation System
@@ -60,7 +61,9 @@ This app displays IdleOn game Tome Toolbox achievement data with scoring calcula
 - `TotalPointsBox` - Displays total points for user vs comparison with diff
 - `ToolboxTable` - Main data table with per-achievement comparisons
 - `ImportDialog` - Parses IdleOnToolbox copy/paste data
+- `BulkImportDialog` - Dev-only feature for bulk account imports
 - `ExportDialog` - JSON export with copy button
+- `ManageAccountsDialog` - Manage custom comparison accounts
 
 **Color Gradient System:**
 The diff columns use RGB interpolation between color stops:
@@ -72,3 +75,9 @@ Colors smoothly transition between these thresholds for both light and dark mode
 ### State Persistence
 
 `useStickyState` hook syncs React state with localStorage automatically. Used for storing user's toolbox scores between sessions.
+
+### Account Management
+
+**Hardcoded Accounts:** 10 reference accounts in `src/app/functions/accounts.ts`
+**Custom Accounts:** User can import and save custom accounts via localStorage
+**Best Account:** Virtual account showing the maximum score for each achievement across all accounts (hardcoded + custom)
