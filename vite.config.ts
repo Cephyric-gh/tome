@@ -10,6 +10,6 @@ export default {
     plugins: [react(), tailwindcss()],
     build: { outDir: "../../dist", emptyOutDir: true },
     define: {
-        "import.meta.env.VITE_LAST_LEADERBOARD_UPDATE": '"2025-12-14 02:00"',
+        "import.meta.env.VITE_LAST_LEADERBOARD_UPDATE": '"2025-12-29 00:00"',
     },
 } satisfies UserConfig;

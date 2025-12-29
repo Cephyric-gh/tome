@@ -36,7 +36,7 @@ export default function FiltersBar({
                     <option value="-1">Best</option>
                     {getAllAccounts().map((account, index) => (
                         <option key={index} value={index}>
-                            {account.name}
+                            {account.name} ({account.date.toISOString().split("T")[0]})
                         </option>
                     ))}
                 </select>
