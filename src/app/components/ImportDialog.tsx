@@ -10,16 +10,40 @@ interface ImportDialogProps {
 }
 
 function parseImportText(text: string): number[] {
-    const lines = text.split("\n");
+    const trimmed = text.trim();
+
+    // First, try to parse as JSON (export format)
+    // Remove any extra whitespace/newlines that might interfere
+    try {
+        const parsed = JSON.parse(trimmed.replace(/\s+/g, "").replace(",]", "]"));
+
+        if (Array.isArray(parsed) && parsed.every((item) => typeof item === "number" && !isNaN(item))) {
+            return parsed;
+        }
+    } catch {
+        // Not valid JSON, try the original trimmed text
+        try {
+            const parsed = JSON.parse(trimmed);
+
+            if (Array.isArray(parsed) && parsed.every((item) => typeof item === "number" && !isNaN(item))) {
+                return parsed;
+            }
+        } catch {
+            // Not valid JSON, continue to IdleonToolbox format parsing
+        }
+    }
+
+    // Fall back to IdleonToolbox format parsing
+    const lines = trimmed.split("\n");
     const parsedNumbers: number[] = [];
 
     for (const line of lines) {
-        const trimmed = line.trim().toLowerCase();
+        const lineTrimmed = line.trim().toLowerCase();
         // Skip empty lines
-        if (trimmed.length === 0 || trimmed.endsWith("pts")) continue;
+        if (lineTrimmed.length === 0 || lineTrimmed.endsWith("pts")) continue;
 
         // Remove commas and try to parse as number
-        const cleaned = IDLEONNUM(trimmed);
+        const cleaned = IDLEONNUM(lineTrimmed);
         const num = Number(cleaned);
 
         // Only add if it's a valid number
@@ -94,9 +118,9 @@ export default function ImportDialog({ onClose, onImport, onAccountsUpdated }: I
                 <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                     <h2 className="text-xl font-bold text-gray-900 dark:text-white">Import Toolbox Scores</h2>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                        This is not the normal export JSON. Go to the IdleonToolbox tome page, select all the entries
-                        from Account LV to Highest Leveled Spelunker instead. Do not alter the way it pastes into the
-                        input.
+                        Paste the JSON array from the Export dialog, or go to the IdleonToolbox tome page and select all
+                        the entries from Account LV to Highest Leveled Spelunker. Do not alter the way it pastes into
+                        the input.
                     </p>
                 </div>
                 <div className="px-6 py-4 flex-1">
